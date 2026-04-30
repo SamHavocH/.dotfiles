@@ -1,0 +1,62 @@
+{
+  "system": {
+    "editor": "nvim",
+    "aurHelper": "yay"
+  },
+  "theme": {
+    "name": "gruvbox",
+    "mode": "auto",
+    "scheme": "dark"
+  },
+  "wallpaper": {
+    "current": "/home/vyl/.lyne-dots/local/.local/wallpapers/rx7savannah89.png",
+    "dynamic": true,
+    "favorites": []
+  },
+  "nightLight": {
+    "enabled": false,
+    "intensity": 0.5
+  },
+  "bar": {
+    "autoHide": false,
+    "height": 30
+  },
+  "opacity": {
+    "background": 0.9
+  },
+  "geometry": {
+    "radiusSmall": 5,
+    "radius": 10,
+    "radiusLarge": 15,
+    "spacing": 8,
+    "padding": 6
+  },
+  "typography": {
+    "font": "Caskaydia Cove Nerd Font",
+    "sizeSmall": 12,
+    "sizeNormal": 14,
+    "sizeLarge": 16,
+    "iconSmall": 18,
+    "icon": 22,
+    "iconLarge": 28
+  },
+  "animations": {
+    "short": 100,
+    "normal": 200,
+    "long": 400,
+    "screenshot": true
+  },
+  "notifications": {
+    "width": 350,
+    "imageSize": 40,
+    "timeout": 5000,
+    "spacing": 10
+  },
+  "idle": {
+    "caffeine": true,
+    "dpmsEnabled": true,
+    "mediaInhibit": true,
+    "lockTimeout": 600,
+    "dpmsTimeout": 300
+  }
+}
