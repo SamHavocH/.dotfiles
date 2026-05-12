@@ -114,6 +114,41 @@ export PATH=$PATH:/snap/bin
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh;
 
+# Minhas Funcoes:
+
+
+tmux_help() {
+    echo -e "\033[1;34m─── TMUX CHEATSHEET (Prefix: Ctrl+s) ───\033[0m"
+    
+    echo -e "\n\033[1;32m[ Sessões ]\033[0m"
+    echo "  :new <nome>  Criar nova sessão (dentro do tmux)"
+    echo "  s            Listar/Trocar sessões"
+    echo "  $            Renomear sessão atual"
+    echo "  d            Destacar (Detach) da sessão"
+
+    echo -e "\n\033[1;32m[ Janelas (Windows) ]\033[0m"
+    echo "  c            Criar nova janela"
+    echo "  ,            Renomear janela atual"
+    echo "  n / p        Próxima / Janela anterior"
+    echo "  0-9          Ir para janela específica"
+    echo "  w            Listar janelas visualmente"
+    echo "  &            Fechar janela atual"
+
+    echo -e "\n\033[1;32m[ Painéis (Panes) ]\033[0m"
+    echo "  %            Dividir verticalmente"
+    echo "  \"            Dividir horizontalmente"
+    echo "  o            Ciclar entre painéis"
+    echo "  q            Mostrar números dos painéis"
+    echo "  z            Maximizar/Minimizar painel (Zoom)"
+    echo "  x            Fechar painel atual"
+    echo "  Espaço       Mudar layout dos painéis"
+
+    echo -e "\n\033[1;32m[ Navegação e Cópia ]\033[0m"
+    echo "  [            Entrar no modo Scroll/Cópia (q para sair)"
+    echo "  PageUp/Down  Subir/Descer no modo Scroll"
+    
+    echo -e "\n\033[1;33mDica: Para comandos fora do tmux, use 'tmux ls' ou 'tmux attach'.\033[0m"
+}
 
 stow-add() {
     local target="$1"
@@ -167,3 +202,15 @@ stow-add() {
         return 1
     fi
 }
+
+
+# Define o Neovim como editor padrão
+export EDITOR='nvim'
+export VISUAL='nvim'
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# Inicia o tmux automaticamente se não estiver em uma sessão e o terminal for interativo
+# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ "screen" ]] && [[ ! "$TERM" =~ "tmux" ]] && [ -z "$TMUX" ]; then
+#     tmux attach-session -t default 2>/dev/null || tmux new-session -s default
+# fi
+
