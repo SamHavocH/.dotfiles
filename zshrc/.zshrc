@@ -117,7 +117,7 @@ export PATH=$PATH:/snap/bin
 # Minhas Funcoes:
 
 
-tmux_help() {
+tmux-cs() {
     echo -e "\033[1;34m─── TMUX CHEATSHEET (Prefix: Ctrl+s) ───\033[0m"
     
     echo -e "\n\033[1;32m[ Sessões ]\033[0m"
