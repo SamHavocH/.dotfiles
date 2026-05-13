@@ -114,6 +114,38 @@ export PATH=$PATH:/snap/bin
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh;
 
+#Meus widgets: 
+
+# 1. Carrega a função utilitaria de hooks do Zsh
+
+autoload -Uz add-zsh-hook
+
+# 2. Define a funcao que busca e ativa o venv
+auto_activate_venv() {
+  local venv_name=".venv"
+
+  # Verifica se existe a pasta do venv e o script de ativacao
+  if [[ -f "./${venv_name}/bin/activate" ]]; then
+    if [[ "$VIRTUAL_ENV" != "$(pwd)/${venv_name}" ]]; then
+      source "./${venv_name}/bin/activate"
+    fi
+  else
+    # Desativa o venv atual se você sair da pasta dele
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+      # Garante que voce so desativa se saiu da arvore de diretorios do venv
+      if [[ "$PWD" != "${VIRTUAL_ENV%/*}"* ]]; then
+        deactivate
+      fi
+    fi
+  fi
+}
+
+# 3. Registra a funcao no hook 'chpwd' (change working directory)
+add-zsh-hook chpwd auto_activate_venv
+
+# 4. Executa uma vez ao abrir o terminal para checar a pasta inicial
+auto_activate_venv
+
 # Minhas Funcoes:
 
 
@@ -216,3 +248,5 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 #     tmux attach-session -t default 2>/dev/null || tmux new-session -s default
 # fi
 
+
+. "$HOME/.local/bin/env"
