@@ -241,7 +241,6 @@ alias -s py=python3
 # Define o Neovim como editor padrão
 export EDITOR='nvim'
 export VISUAL='nvim'
-source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # Inicia o tmux automaticamente se não estiver em uma sessão e o terminal for interativo
 # if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ "screen" ]] && [[ ! "$TERM" =~ "tmux" ]] && [ -z "$TMUX" ]; then
