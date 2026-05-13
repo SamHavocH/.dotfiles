@@ -203,6 +203,8 @@ stow-add() {
     fi
 }
 
+# Permite rodar scripts python sem precisar chamar o python
+alias -s py=python3
 
 # Define o Neovim como editor padrão
 export EDITOR='nvim'
