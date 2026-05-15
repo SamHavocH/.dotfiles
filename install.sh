@@ -6,15 +6,13 @@
 echo "=================="
 echo "Instalacao ohmyzsh"
 echo "=================="
+
 # CHSH=no impede a troca de shell imediata
 # RUNZSH=no impede que o instalador abra um novo terminal e trave o script
 
 # echo ""
 if [ ! -d "~/.oh-my-zsh/"]; then
   KEEP_ZSHRC=yes CHSH=no RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-else
-  echo "oh-my-zsh encontrado."
 fi
 
 echo "========================"
