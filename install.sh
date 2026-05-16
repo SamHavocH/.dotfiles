@@ -1,5 +1,10 @@
 #!/bin/zsh
 
+FONT_NAME="JetBrainsMono Nerd Font"
+FONT_DIR="$HOME/.local/share/fonts/JetBrainsMonoNerd"
+ZIP_PATH="/tmp/JetBrainsMonoNerd.zip"
+FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+
 # Interrompe o script em caso de qualquer erro
 # set -e
 
@@ -39,6 +44,25 @@ rm -f "$HOME/.zshrc" "$HOME/.p10k.zsh" "$HOME/.tmux.conf"
 
 # Executa o stow forçando links e limpando conflitos antigos
 stow --adopt nvim zshrc p10k.zsh tmux.conf
+
+echo "====================="
+echo "instalando fonte Nerd"
+echo "====================="
+
+if fc-match "$FONT_NAME" | grep -qi "JetBrainsMono"; then
+  echo "✓ $FONT_NAME já está instalada"
+else
+  echo "→ Instalando $FONT_NAME..."
+
+  mkdir -p "$FONT_DIR"
+
+  wget -q --show-progress "$FONT_URL" -O "$ZIP_PATH"
+  unzip -o "$ZIP_PATH" -d "$FONT_DIR"
+
+  fc-cache -fv "$FONT_DIR"
+
+  echo "✓ $FONT_NAME instalada"
+fi
 
 echo "==================================================="
 echo "Pronto! Configurações aplicadas."
