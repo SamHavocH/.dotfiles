@@ -18,6 +18,7 @@ Mais do que isto, este repositorio serve tambem como backup.
 ### Desktop Environment (DE)
 - Hyprland
 - Sway
+- Caelestia (shell do Hyprland, com os atalhos no estilo lyne-dots)
 
 ### Misc
 - Waybar
@@ -38,5 +39,16 @@ Coloquei um script de instalacao que junta essas configuracoes usando o GNU stow
 - zsh (oh-my-zsh)
 - powerlevel10k
 - tmux
+
+## Caelestia (Hyprland)
+Instalacao separada, pensada para uma maquina limpa de Arch/CachyOS:
+
+```bash
+./install-caelestia.sh
+```
+
+Instala o Caelestia (shell + Hyprland) pela AUR e aplica meus atalhos, que
+seguem o layout do lyne-dots. A lista completa dos atalhos esta em
+[docs/caelestia.md](docs/caelestia.md).
 
 
