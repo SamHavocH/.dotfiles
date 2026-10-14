@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+"""Impede o bloqueio automático (xss-lock) enquanto há vídeo na tela.
+
+Considera "vídeo rodando" quando:
+  - algum stream de áudio não pausado pertence a uma janela (ou a um processo
+    filho dela) que está num workspace visível; ou
+  - a janela focada está em tela cheia (cobre vídeo mudo).
+
+Nesses casos reseta o timer do screensaver do X (mesmo efeito de `xset s reset`),
+então o xss-lock não dispara e o DPMS não apaga a tela.
+"""
+import ctypes
+import json
+import subprocess
+import sys
+import time
+
+INTERVALO = 30  # segundos; bem menor que o timeout do screensaver (600s)
+
+xlib = ctypes.cdll.LoadLibrary("libX11.so.6")
+xlib.XOpenDisplay.restype = ctypes.c_void_p
+xlib.XOpenDisplay.argtypes = [ctypes.c_char_p]
+xlib.XResetScreenSaver.argtypes = [ctypes.c_void_p]
+xlib.XFlush.argtypes = [ctypes.c_void_p]
+
+
+def rodar(*cmd):
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=5).stdout
+    except (OSError, subprocess.SubprocessError):
+        return ""
+
+
+def janelas_visiveis():
+    """Retorna (pids das janelas em workspaces visíveis, janela focada em fullscreen?)."""
+    try:
+        arvore = json.loads(rodar("i3-msg", "-t", "get_tree"))
+        visiveis = {w["name"] for w in json.loads(rodar("i3-msg", "-t", "get_workspaces")) if w["visible"]}
+    except (json.JSONDecodeError, KeyError):
+        return set(), False
+
+    xids, fullscreen = [], False
+
+    def andar(no, no_workspace_visivel):
+        nonlocal fullscreen
+        if no.get("type") == "workspace":
+            no_workspace_visivel = no.get("name") in visiveis
+        if no.get("window") and no_workspace_visivel:
+            xids.append(no["window"])
+            if no.get("focused") and no.get("fullscreen_mode"):
+                fullscreen = True
+        for filho in no.get("nodes", []) + no.get("floating_nodes", []):
+            andar(filho, no_workspace_visivel)
+
+    andar(arvore, False)
+
+    pids = set()
+    for xid in xids:
+        pid = rodar("xdotool", "getwindowpid", str(xid)).strip()
+        if pid.isdigit():
+            pids.add(int(pid))
+    return pids, fullscreen
+
+
+def pids_tocando_audio():
+    try:
+        streams = json.loads(rodar("pactl", "-f", "json", "list", "sink-inputs") or "[]")
+    except json.JSONDecodeError:
+        return set()
+    pids = set()
+    for s in streams:
+        pid = s.get("properties", {}).get("application.process.id", "")
+        if not s.get("corked") and str(pid).isdigit():
+            pids.add(int(pid))
+    return pids
+
+
+def ancestrais(pid):
+    """pid e todos os processos pais (navegadores tocam áudio num processo filho)."""
+    cadeia = set()
+    while pid > 1 and pid not in cadeia:
+        cadeia.add(pid)
+        try:
+            with open(f"/proc/{pid}/stat") as f:
+                pid = int(f.read().rsplit(")", 1)[1].split()[1])
+        except (OSError, ValueError, IndexError):
+            break
+    return cadeia
+
+
+def tem_video_na_tela():
+    pids_janelas, fullscreen = janelas_visiveis()
+    if fullscreen:
+        return True
+    return any(ancestrais(pid) & pids_janelas for pid in pids_tocando_audio())
+
+
+def main():
+    display = xlib.XOpenDisplay(None)
+    if not display:
+        sys.exit("video-idle-inhibit: não consegui abrir o display X")
+    while True:
+        if tem_video_na_tela():
+            xlib.XResetScreenSaver(display)
+            xlib.XFlush(display)
+        time.sleep(INTERVALO)
+
+
+if __name__ == "__main__":
+    main()

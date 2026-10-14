@@ -253,3 +253,4 @@ export VISUAL='nvim'
 if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
 fi
+export PATH="$HOME/.local/bin:$PATH"

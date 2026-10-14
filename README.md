@@ -19,9 +19,15 @@ Mais do que isto, este repositorio serve tambem como backup.
 - Hyprland
 - Sway
 - Caelestia (shell do Hyprland, com os atalhos no estilo lyne-dots)
+- i3 (com picom, dunst e .xinitrc)
 
 ### Misc
 - Waybar
+- Polybar
+- Rofi
+- Micro
+- Btop
+- video-idle-inhibit (~/.local/bin, impede o bloqueio de tela durante vídeo no i3)
 
 ### Pacotes externos:
 - Tmux Plugin Manager (TPM)
